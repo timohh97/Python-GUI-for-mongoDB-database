@@ -1,4 +1,5 @@
 import pymongo
+from bson import ObjectId
 from pymongo import MongoClient
 import tkinter as tk
 import tkinter.messagebox
@@ -10,6 +11,18 @@ def insertIntoDatabase(firstName, lastName, age, job, description):
     tkinter.messagebox.showinfo("Message","Inserted data successfully.")
    except:
     tkinter.messagebox.showinfo("Error")
+
+def updateDatabase(id,firstName,lastName,age,job,description):
+    return None
+
+
+def getAllData():
+ return list(collection.find())
+
+
+def getFromDatabase(id):
+ return str(collection.find_one({"_id": id}))
+
 
 
 def deleteFromDatabase(id):
@@ -27,28 +40,86 @@ def initStartGUI():
  window.geometry("400x300")
  window.eval('tk::PlaceWindow . center')
 
- buttonPost = tk.Button(window,text="Insert data",command=lambda:initInsertGUI())
+ buttonPost = tk.Button(window,text="Insert data",command=lambda:initInsertGUI(window))
  buttonPost.pack()
 
- buttonDelete = tk.Button(window,text="Delete data",command=lambda:initDeleteGUI())
+ buttonDelete = tk.Button(window,text="Delete data",command=lambda:initDeleteGUI(window))
  buttonDelete.pack()
 
- buttonUpdate = tk.Button(window,text="Update data")
+ buttonUpdate = tk.Button(window,text="Update data",command=lambda:initUpdateGUI(window))
  buttonUpdate.pack()
 
- buttonGet = tk.Button(window,text="Get data",command=lambda:initGetGUI())
+ buttonGet = tk.Button(window,text="Get data",command=lambda:initGetGUI(window))
  buttonGet.pack()
 
- buttonShow = tk.Button(window,text="Look at database",command=lambda :showDatabaseGUI())
+ buttonShow = tk.Button(window,text="Look at database",command=lambda :showDatabaseGUI(window))
  buttonShow.pack()
 
  window.mainloop()
 
-def getFromDatabase(id):
-   return str(collection.find_one({"_id":""+id}))
+def goBackToStart(oldWindow):
+    oldWindow.destroy()
+    initStartGUI()
+
+def initUpdateGUI(oldWindow):
+   oldWindow.destroy()
+   window = tk.Tk()
+   window.title("Database GUI")
+   window.resizable(False, False)
+   window.geometry("400x300")
+   window.eval('tk::PlaceWindow . center')
+
+   label0 = tk.Label(window, text="Id:")
+   label0.pack()
+
+   textField0 = tk.Entry(window)
+   textField0.pack()
+
+   label1 = tk.Label(window, text="First name:")
+   label1.pack()
+
+   textField1 = tk.Entry(window)
+   textField1.pack()
+
+   label2 = tk.Label(window, text="Last name:")
+   label2.pack()
+
+   textField2 = tk.Entry(window)
+   textField2.pack()
+
+   label3 = tk.Label(window, text="Age:")
+   label3.pack()
+
+   textField3 = tk.Entry(window)
+   textField3.pack()
+
+   label4 = tk.Label(window, text="Job:")
+   label4.pack()
+
+   textField4 = tk.Entry(window)
+   textField4.pack()
+
+   label5 = tk.Label(window, text="Description:")
+   label5.pack()
+
+   textField5 = tk.Entry(window)
+   textField5.pack()
+
+   buttonUpdate = tk.Button(window, text="Update data",
+                         command=lambda: updateDatabase(textField0.get(),textField1.get(), textField2.get(), textField3.get(),
+                                                            textField4.get(), textField5.get()))
+   buttonUpdate.pack()
+
+   buttonGoBack = tk.Button(window, text="Go back",
+                            command=lambda: goBackToStart(window))
+   buttonGoBack.pack()
+
+   window.mainloop()
 
 
-def initGetGUI():
+
+def initGetGUI(oldWindow):
+ oldWindow.destroy()
  window = tk.Tk()
  window.title("Database GUI")
  window.resizable(False, False)
@@ -68,10 +139,15 @@ def initGetGUI():
                           command=lambda: textarea.insert(tk.END,getFromDatabase(textField1.get())))
  buttonGet.pack()
 
+ buttonGoBack = tk.Button(window, text="Go back",
+                          command=lambda: goBackToStart(window))
+ buttonGoBack.pack()
+
  window.mainloop()
 
 
-def initDeleteGUI():
+def initDeleteGUI(oldWindow):
+ oldWindow.destroy()
  window = tk.Tk()
  window.title("Database GUI")
  window.resizable(False, False)
@@ -88,11 +164,16 @@ def initDeleteGUI():
                        command=lambda: deleteFromDatabase(textField1.get()))
  buttonDelete.pack()
 
+ buttonGoBack = tk.Button(window, text="Go back",
+                          command=lambda: goBackToStart(window))
+ buttonGoBack.pack()
+
  window.mainloop()
 
 
 
-def initInsertGUI():
+def initInsertGUI(oldWindow):
+ oldWindow.destroy()
  window = tk.Tk()
  window.title("Database GUI")
  window.resizable(False, False)
@@ -133,16 +214,16 @@ def initInsertGUI():
                        command=lambda :insertIntoDatabase(textField1.get(),textField2.get(),textField3.get(),textField4.get(),textField5.get()))
  buttonGet.pack()
 
+ buttonGoBack = tk.Button(window, text="Go back",
+                          command=lambda:goBackToStart(window))
+ buttonGoBack.pack()
+
  window.mainloop()
 
 
-def getAllData():
-    return list(collection.find())
 
-
-
-
-def showDatabaseGUI():
+def showDatabaseGUI(oldWindow):
+ oldWindow.destroy()
  window = tk.Tk()
  window.title("Database GUI")
  window.resizable(False, False)
@@ -154,6 +235,10 @@ def showDatabaseGUI():
 
  buttonShow = tk.Button(window, text="Show data", command=lambda: textarea.insert(tk.END, getAllData()))
  buttonShow.pack()
+
+ buttonGoBack = tk.Button(window, text="Go back",
+                          command=lambda: goBackToStart(window))
+ buttonGoBack.pack()
 
  window.mainloop()
 
@@ -170,6 +255,11 @@ try:
  initStartGUI()
 except:
  print("Wrong password.")
+
+
+print(getFromDatabase(ObjectId("5ea568165a0f4447e87143c6")))
+
+
 
 
 
