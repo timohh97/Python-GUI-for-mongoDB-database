@@ -161,7 +161,7 @@ def initDeleteGUI(oldWindow):
  textField1.pack()
 
  buttonDelete = tk.Button(window, text="Delete",
-                       command=lambda: deleteFromDatabase(textField1.get()))
+                       command=lambda: deleteFromDatabase(ObjectId(textField1.get())))
  buttonDelete.pack()
 
  buttonGoBack = tk.Button(window, text="Go back",
