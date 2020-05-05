@@ -136,7 +136,7 @@ def initGetGUI(oldWindow):
  textarea.pack()
 
  buttonGet = tk.Button(window, text="Get data",
-                          command=lambda: textarea.insert(tk.END,getFromDatabase(textField1.get())))
+                          command=lambda: textarea.insert(tk.END,getFromDatabase(ObjectId(textField1.get()))))
  buttonGet.pack()
 
  buttonGoBack = tk.Button(window, text="Go back",
